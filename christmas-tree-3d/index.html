@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Christmas Tree 3D - Premium Experience</title>
+
+  <style>
+    /* Critical CSS - chỉ những phần cần thiết cho màn hình đầu tiên */
+    #curtain {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      z-index: 99999;
+      pointer-events: none;
+      background: linear-gradient(135deg, #0a2e38 0%, #05161f 100%);
+    }
+
+    .curtain-left,
+    .curtain-right {
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(135deg, #8b0000, #b30000, #ff0000);
+      transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+      will-change: transform;
+      box-shadow: 0 0 30px rgba(139, 0, 0, 0.5);
+    }
+
+    .curtain-left {
+      left: 0;
+      transform: translateX(0);
+    }
+
+    .curtain-right {
+      right: 0;
+      transform: translateX(0);
+    }
+
+    .curtain-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 10;
+      width: 90%;
+      max-width: 800px;
+    }
+
+    .curtain-title {
+      color: #ffd700;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+      font-family: 'Georgia', serif;
+      letter-spacing: 2px;
+      animation: titleGlow 3s ease-in-out infinite alternate;
+    }
+
+    .curtain-subtitle {
+      color: #a8e6cf;
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      margin-bottom: 2.5rem;
+      font-family: 'Arial', sans-serif;
+      opacity: 0.9;
+    }
+
+    .start-btn {
+      padding: 15px 40px;
+      font-size: 1.2rem;
+      background: linear-gradient(135deg, #ffd700, #ffed4e);
+      color: #0a2e38;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
+      transition: all 0.3s ease;
+      font-family: 'Arial', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .start-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(255, 215, 0, 0.6);
+      background: linear-gradient(135deg, #ffed4e, #fff9aa);
+    }
+
+    /* Cây thông Noel */
+    .christmas-tree {
+      position: relative;
+      width: 200px;
+      height: 300px;
+      margin: 0 auto 30px;
+    }
+
+    .tree-layer {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-left: 50px solid transparent;
+      border-right: 50px solid transparent;
+      border-bottom: 80px solid #0a6b2e;
+    }
+
+    .tree-layer:nth-child(1) {
+      top: 160px;
+      border-bottom-color: #0a6b2e;
+    }
+
+    .tree-layer:nth-child(2) {
+      top: 100px;
+      border-bottom-color: #0d8a3c;
+      width: 0;
+      height: 0;
+      border-left: 70px solid transparent;
+      border-right: 70px solid transparent;
+      border-bottom: 90px solid #0d8a3c;
+    }
+
+    .tree-layer:nth-child(3) {
+      top: 40px;
+      border-bottom-color: #10a349;
+      width: 0;
+      height: 0;
+      border-left: 90px solid transparent;
+      border-right: 90px solid transparent;
+      border-bottom: 100px solid #10a349;
+    }
+
+    .tree-trunk {
+      position: absolute;
+      bottom: 0;
+      left: 85px;
+      width: 30px;
+      height: 40px;
+      background: #8B4513;
+      border-radius: 0 0 5px 5px;
+    }
+
+    /* Trang trí cây */
+    .ornament {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      z-index: 5;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+      animation: ornamentGlow 2s ease-in-out infinite alternate;
+    }
+
+    .ornament:nth-child(5) {
+      top: 180px;
+      left: 95px;
+      background: #ff0000;
+      animation-delay: 0s;
+    }
+
+    .ornament:nth-child(6) {
+      top: 140px;
+      left: 65px;
+      background: #ffd700;
+      animation-delay: 0.3s;
+    }
+
+    .ornament:nth-child(7) {
+      top: 140px;
+      left: 135px;
+      background: #1e90ff;
+      animation-delay: 0.6s;
+    }
+
+    .ornament:nth-child(8) {
+      top: 100px;
+      left: 100px;
+      background: #ff1493;
+      animation-delay: 0.9s;
+    }
+
+    .ornament:nth-child(9) {
+      top: 90px;
+      left: 160px;
+      background: #00ff00;
+      animation-delay: 1.2s;
+    }
+
+    .ornament:nth-child(10) {
+      top: 60px;
+      left: 60px;
+      background: #ffa500;
+      animation-delay: 1.5s;
+    }
+
+    .ornament:nth-child(11) {
+      top: 50px;
+      left: 130px;
+      background: #ff00ff;
+      animation-delay: 1.8s;
+    }
+
+    /* Ngôi sao trên đỉnh cây */
+    .tree-star {
+      position: absolute;
+      top: 10px;
+      left: 85px;
+      width: 30px;
+      height: 30px;
+      background: #ffd700;
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+      animation: starTwinkle 1.5s ease-in-out infinite alternate;
+      z-index: 6;
+    }
+
+    /* Hiệu ứng tuyết rơi */
+    .snowflakes {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .snowflake {
+      position: absolute;
+      top: -10px;
+      color: #fff;
+      font-size: 1.5rem;
+      opacity: 0.8;
+      animation: snowFall linear forwards;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Animation */
+    @keyframes titleGlow {
+      from {
+        text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+      }
+
+      to {
+        text-shadow: 0 0 30px rgba(255, 215, 0, 0.9), 0 0 40px rgba(255, 215, 0, 0.5);
+      }
+    }
+
+    @keyframes ornamentGlow {
+      from {
+        transform: scale(1);
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+      }
+
+      to {
+        transform: scale(1.1);
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+      }
+    }
+
+    @keyframes starTwinkle {
+      from {
+        opacity: 0.7;
+        transform: scale(1) rotate(0deg);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1.2) rotate(5deg);
+      }
+    }
+
+    @keyframes snowFall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+      }
+    }
+
+    /* Ẩn nội dung chính cho đến khi màn chào kết thúc */
+    #app,
+    #addMessageBtn {
+      opacity: 0;
+      transition: opacity 0.8s ease-in;
+    }
+
+    body.curtain-removed #app,
+    body.curtain-removed #addMessageBtn {
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Curtain Intro - Đặt ở đầu để render ngay lập tức -->
+  <div id="curtain">
+    <div class="curtain-left"></div>
+    <div class="curtain-right"></div>
+
+    <div class="curtain-content">
+      <div class="christmas-tree">
+        <div class="tree-layer"></div>
+        <div class="tree-layer"></div>
+        <div class="tree-layer"></div>
+        <div class="tree-trunk"></div>
+        <div class="tree-star"></div>
+        <div class="ornament"></div>
+        <div class="ornament"></div>
+        <div class="ornament"></div>
+        <div class="ornament"></div>
+        <div class="ornament"></div>
+        <div class="ornament"></div>
+        <div class="ornament"></div>
+      </div>
+
+      <h1 class="curtain-title">Wishing Christmas Tree</h1>
+      <p class="curtain-subtitle">Chúc bạn một mùa Giáng Sinh an lành và hạnh phúc</p>
+      <button class="start-btn" id="startBtn">Bắt Đầu Trải Nghiệm</button>
+    </div>
+
+    <div class="snowflakes" id="snowflakes"></div>
+  </div>
+
+  <div id="app"></div>
+
+  <!-- Nút thêm lời chúc -->
+  <button id="addMessageBtn">Add Wish</button>
+
+  <!-- Popup đơn giản -->
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="popup-content">
+      <h3 class="popup-title">✨ Christmas Wish ✨</h3>
+      <textarea class="message-input" id="messageInput" placeholder="Write your Christmas wish here... 🎅"></textarea>
+      <div class="popup-buttons">
+        <button class="popup-btn cancel-btn" id="cancelBtn">Cancel</button>
+        <button class="popup-btn submit-btn" id="submitBtn">Send Wish</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Non-critical CSS - tải sau khi trang đã render -->
+  <style>
+    #addMessageBtn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 9999;
+      padding: 12px 24px;
+      font-size: 16px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #d4af37, #ffd700);
+      color: #1a472a;
+      border: none;
+      border-radius: 25px;
+      font-weight: bold;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-family: 'Arial', sans-serif;
+    }
+
+    #addMessageBtn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
+      background: linear-gradient(135deg, #ffd700, #ffec8b);
+    }
+
+    #addMessageBtn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 10px rgba(212, 175, 55, 0.4);
+    }
+
+    #addMessageBtn::before {
+      content: "🎄 ";
+      font-size: 18px;
+    }
+
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+
+    .popup-content {
+      background: linear-gradient(135deg, #1a472a, #2d5a3d);
+      padding: 30px;
+      border-radius: 15px;
+      width: 350px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 3px solid #d4af37;
+      position: relative;
+    }
+
+    .popup-content::before {
+      content: "";
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      background: linear-gradient(45deg, #ffd700, #d4af37, #ffd700);
+      border-radius: 18px;
+      z-index: -1;
+      opacity: 0.7;
+    }
+
+    .popup-title {
+      margin: 0 0 20px 0;
+      color: #ffd700;
+      font-size: 22px;
+      text-align: center;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      font-family: 'Arial', sans-serif;
+      font-weight: bold;
+    }
+
+    .message-input {
+      width: 100%;
+      height: 100px;
+      padding: 15px;
+      border: 2px solid #d4af37;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 16px;
+      resize: vertical;
+      margin-bottom: 20px;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .message-input::placeholder {
+      color: #ccc;
+      font-style: italic;
+    }
+
+    .message-input:focus {
+      outline: none;
+      border-color: #ffec8b;
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 10px rgba(255, 236, 139, 0.3);
+    }
+
+    .popup-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .popup-btn {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      font-family: 'Arial', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .submit-btn {
+      background: linear-gradient(135deg, #d4af37, #ffd700);
+      color: #1a472a;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+      background: linear-gradient(135deg, #ffd700, #ffec8b);
+    }
+
+    .cancel-btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 2px solid #d4af37;
+    }
+
+    .cancel-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* Hiệu ứng tuyết rơi nhẹ cho popup */
+    .popup-content::after {
+      content: "❄";
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 20px;
+      animation: sparkle 2s ease-in-out infinite;
+    }
+
+    @keyframes sparkle {
+
+      0%,
+      100% {
+        opacity: 0.7;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.2);
+      }
+    }
+  </style>
+
+  <script type="module" src="/src/main.ts"></script>
+
+  <script>
+    // Tạo hiệu ứng tuyết rơi
+    function createSnowflakes() {
+      const snowflakesContainer = document.getElementById('snowflakes');
+      const snowflakeCount = 80;
+
+      for (let i = 0; i < snowflakeCount; i++) {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.innerHTML = '❄';
+
+        // Vị trí ngẫu nhiên
+        const startPositionX = Math.random() * 100;
+        const startPositionY = Math.random() * 100;
+
+        // Thời gian rơi ngẫu nhiên
+        const fallDuration = 8 + Math.random() * 12;
+        const fallDelay = Math.random() * 5;
+
+        // Kích thước ngẫu nhiên
+        const size = 0.8 + Math.random() * 1.5;
+
+        snowflake.style.left = `${startPositionX}%`;
+        snowflake.style.top = `${-startPositionY}%`;
+        snowflake.style.animationDuration = `${fallDuration}s`;
+        snowflake.style.animationDelay = `${fallDelay}s`;
+        snowflake.style.fontSize = `${size}rem`;
+        snowflake.style.opacity = 0.6 + Math.random() * 0.4;
+
+        snowflakesContainer.appendChild(snowflake);
+      }
+    }
+
+    // Tối ưu: Sử dụng requestAnimationFrame để đảm bảo animation mượt mà
+    document.addEventListener('DOMContentLoaded', function () {
+      // Khởi tạo các biến cần thiết
+      const addMessageBtn = document.getElementById('addMessageBtn');
+      const popupOverlay = document.getElementById('popupOverlay');
+      const cancelBtn = document.getElementById('cancelBtn');
+      const submitBtn = document.getElementById('submitBtn');
+      const messageInput = document.getElementById('messageInput');
+      const startBtn = document.getElementById('startBtn');
+
+      // Tạo hiệu ứng tuyết rơi
+      createSnowflakes();
+
+      // Xử lý nút bắt đầu
+      if (startBtn) {
+        startBtn.addEventListener('click', startExperience);
+      }
+
+      // Mở popup
+      if (addMessageBtn) {
+        addMessageBtn.addEventListener('click', () => {
+          popupOverlay.style.display = 'flex';
+          messageInput.value = '';
+          messageInput.focus();
+        });
+      }
+
+      // Đóng popup
+      const closePopup = () => {
+        popupOverlay.style.display = 'none';
+      };
+
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', closePopup);
+      }
+
+      // Đóng khi click ra ngoài
+      if (popupOverlay) {
+        popupOverlay.addEventListener('click', (e) => {
+          if (e.target === popupOverlay) {
+            closePopup();
+          }
+        });
+      }
+
+      // Gửi lời chúc
+      if (submitBtn) {
+        submitBtn.addEventListener('click', async () => {
+          const message = messageInput.value.trim();
+
+          if (!message) {
+            alert('Please write your Christmas wish! 🎄');
+            return;
+          }
+
+          try {
+            const response = await fetch('http://localhost:8080/api/message', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              body: `description=${encodeURIComponent(message)}`
+            });
+
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const newMessage = await response.json();
+
+            // Thông báo thành công
+            alert('Your wish has been added to the Christmas tree! 🌟');
+            closePopup();
+
+          } catch (error) {
+            console.error('Failed to submit message:', error);
+            alert('Failed to send your wish. Please try again! ❌');
+          }
+        });
+      }
+
+      // Đóng bằng phím ESC
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && popupOverlay.style.display === 'flex') {
+          closePopup();
+        }
+      });
+    });
+
+    function startExperience() {
+      const curtainLeft = document.querySelector(".curtain-left");
+      const curtainRight = document.querySelector(".curtain-right");
+      const curtainContent = document.querySelector(".curtain-content");
+
+      // Kích hoạt animation
+      if (curtainLeft && curtainRight) {
+        curtainLeft.style.transform = "translateX(-100%)";
+        curtainRight.style.transform = "translateX(100%)";
+      }
+
+      if (curtainContent) {
+        curtainContent.style.opacity = "0";
+      }
+
+      // Hiển thị nội dung chính sau khi màn chào bắt đầu đóng
+      setTimeout(() => {
+        document.body.classList.add('curtain-removed');
+      }, 300);
+
+      // Xoá khi animation xong
+      setTimeout(() => {
+        const curtain = document.getElementById("curtain");
+        if (curtain) {
+          curtain.style.display = "none";
+          // Không remove ngay để tránh reflow
+          setTimeout(() => curtain.remove(), 100);
+        }
+      }, 1200);
+    }
+
+    // Tự động bắt đầu sau 5 giây nếu người dùng không nhấn nút
+    setTimeout(() => {
+      const curtain = document.getElementById("curtain");
+      if (curtain && curtain.style.display !== "none") {
+        startExperience();
+      }
+    }, 5000);
+  </script>
+</body>
+
+</html>

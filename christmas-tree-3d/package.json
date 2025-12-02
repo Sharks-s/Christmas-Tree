@@ -1,0 +1,23 @@
+{
+  "name": "christmas-tree-3d",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "homepage": "https://Sharks-s.github.io/Christmas-Tree/",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "devDependencies": {
+    "@types/three": "^0.181.0",
+    "gh-pages": "^6.3.0",
+    "typescript": "~5.9.3",
+    "vite": "^7.2.4"
+  },
+  "dependencies": {
+    "three": "^0.181.2"
+  }
+}
