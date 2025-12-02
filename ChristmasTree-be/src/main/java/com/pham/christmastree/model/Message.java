@@ -15,6 +15,6 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="Description", columnDefinition = "nvarchar(200)")
+    @Column(name = "description", length = 200)
     private String description;
 }
