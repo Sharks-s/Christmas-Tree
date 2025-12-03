@@ -120,7 +120,7 @@ class ChristmasTreeScene {
 
   private async fetchMessagesAndCreateOrnaments() {
     try {
-      const response = await fetch('http://localhost:8080/api/message');
+      const response = await fetch('https://christmas-tree-esnh.onrender.com/api/message');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
