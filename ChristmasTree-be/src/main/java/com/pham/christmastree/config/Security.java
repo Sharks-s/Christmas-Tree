@@ -33,7 +33,7 @@ public class Security {
 
         // FIX cho Render: dùng allowedOriginPatterns thay vì allowedOrigins
         configuration.setAllowedOriginPatterns(Arrays.asList(
-                "https://christmas-treeee.netlify.app",
+                "https://christmas-treee.netlify.app",
                 "https://christmas-tree-esnh.onrender.com",
                 "http://localhost:*",
                 "http://127.0.0.1:*",
