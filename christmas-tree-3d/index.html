@@ -9,6 +9,28 @@
 
   <style>
     /* Critical CSS - chỉ những phần cần thiết cho màn hình đầu tiên */
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      /* Không cho scroll */
+      background: black;
+      /* Tránh lộ viền background */
+    }
+
+    /* BẮT CANVAS FULL MÀN HÌNH, KHÔNG THỪA 1PX NÀO */
+    canvas {
+      display: block;
+      /* Loại bỏ viền mặc định */
+      width: 100vw !important;
+      height: 100vh !important;
+      margin: 0;
+      padding: 0;
+    }
+
     #curtain {
       position: fixed;
       top: 0;
