@@ -752,6 +752,13 @@ class ChristmasTreeScene {
       this.snowMaterial.opacity = 0.5 + intensity * 0.3;
     }
   }
+  public addNewMessage(description: string) {
+    const temp: any = {
+      id: Date.now(), // tạm id random
+      description: description
+    };
+    this.createOrnamentForMessage(temp); // tạo ornament ngay lập tức
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

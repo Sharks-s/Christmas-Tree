@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <link rel="icon" type="image/png" href="treeicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Christmas Tree 3D - Premium Experience</title>
 
@@ -610,6 +610,7 @@
             alert('Please write your Christmas wish! 🎄');
             return;
           }
+          window.treeScene.addNewMessage(message);
 
           try {
             const response = await fetch('https://christmas-tree-esnh.onrender.com/api/message', {
