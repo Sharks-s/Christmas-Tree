@@ -45,6 +45,15 @@ class ChristmasTreeScene {
     this.setupResizeHandler();
     this.createSnow();
   }
+  public addNewMessage(description: string) {
+    // Tạo object message tạm thời (id tạm để tránh duplicate trong scene)
+    const tempMessage = {
+      id: Date.now(),
+      description: description
+    };
+    // Tạo ornament ngay lập tức (optimistic UI)
+    this.createOrnamentForMessage(tempMessage);
+  }
 
   private init() {
     // Scene setup
@@ -752,15 +761,14 @@ class ChristmasTreeScene {
       this.snowMaterial.opacity = 0.5 + intensity * 0.3;
     }
   }
-  public addNewMessage(description: string) {
-    const temp: any = {
-      id: Date.now(), // tạm id random
-      description: description
-    };
-    this.createOrnamentForMessage(temp); // tạo ornament ngay lập tức
-  }
+}
+
+declare global {
+  interface Window { treeScene?: any; }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  new ChristmasTreeScene();
+  const scene = new ChristmasTreeScene();
+  // expose an instance to window để index.html có thể gọi
+  (window as any).treeScene = scene;
 });

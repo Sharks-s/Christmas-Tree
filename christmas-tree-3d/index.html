@@ -610,7 +610,7 @@
             alert('Please write your Christmas wish! 🎄');
             return;
           }
-          window.treeScene.addNewMessage(message);
+          safeAddNewMessage(message);
 
           try {
             const response = await fetch('https://christmas-tree-esnh.onrender.com/api/message', {
@@ -645,6 +645,27 @@
         }
       });
     });
+
+    function safeAddNewMessage(msg) {
+      if (window.treeScene && typeof window.treeScene.addNewMessage === 'function') {
+        window.treeScene.addNewMessage(msg);
+        return;
+      }
+      // Poll for up to ~3s
+      const start = Date.now();
+      const tryAdd = () => {
+        if (window.treeScene && typeof window.treeScene.addNewMessage === 'function') {
+          window.treeScene.addNewMessage(msg);
+        } else if (Date.now() - start < 3000) {
+          setTimeout(tryAdd, 150);
+        } else {
+          // fallback: nothing — user still sent; server call below will persist
+          console.warn('treeScene not ready; ornament will not be shown immediately.');
+        }
+      };
+      tryAdd();
+    }
+
 
     function startExperience() {
       const curtainLeft = document.querySelector(".curtain-left");
