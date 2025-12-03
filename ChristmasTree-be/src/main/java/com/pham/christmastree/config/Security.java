@@ -2,45 +2,43 @@ package com.pham.christmastree.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
 
 @Configuration
-public class Security implements WebMvcConfigurer {
+@EnableWebSecurity
+public class Security {
 
-    private static final String NETLIFY_URL = "https://christmas-treeee.netlify.app";
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())  // TẮT CSRF cho API
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll()  // CHO PHÉP TẤT CẢ REQUEST
+                );
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOrigins(
-                        NETLIFY_URL,
-                        "http://localhost:3000",
-                        "http://localhost:5173",
-                        "http://127.0.0.1:3000",
-                        "http://127.0.0.1:5173"
-                )
-                .allowedMethods("*")
-                .allowedHeaders("*")
-                .allowCredentials(true)
-                .maxAge(3600);
+        return http.build();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(Arrays.asList(
-                NETLIFY_URL,
-                "http://localhost:3000",
-                "http://localhost:5173",
-                "http://127.0.0.1:3000",
-                "http://127.0.0.1:5173"
+        // FIX cho Render: dùng allowedOriginPatterns thay vì allowedOrigins
+        configuration.setAllowedOriginPatterns(Arrays.asList(
+                "https://christmas-treeee.netlify.app",
+                "https://christmas-tree-esnh.onrender.com",
+                "http://localhost:*",
+                "http://127.0.0.1:*",
+                "https://localhost:*",
+                "https://127.0.0.1:*"
         ));
 
         configuration.setAllowedMethods(Arrays.asList("*"));
@@ -49,7 +47,7 @@ public class Security implements WebMvcConfigurer {
         configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", configuration);
+        source.registerCorsConfiguration("/**", configuration);
 
         return source;
     }
